@@ -1,17 +1,1 @@
-[
-  {
-    "task_id": 1,
-    "owner_id": 1,
-    "task_name": "LR1"
-  },
-  {
-    "task_id": 2,
-    "owner_id": 2,
-    "task_name": "LR1"
-  },
-  {
-    "task_id": 3,
-    "owner_id": 1,
-    "task_name": "LR2"
-  }
-]
+[{"task_id": 1, "owner_id": 1, "task_name": "LR1"}, {"task_id": 3, "owner_id": 1, "task_name": "LR2"}]

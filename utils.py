@@ -1,6 +1,6 @@
 import json
 
-def dict_list_to_json(dict_list, filename):
+def dict_list_to_json(dict_list, filename: str):
     """
     Преобразует список словарей в JSON-строку и сохраняет её в файл.
 
@@ -17,7 +17,7 @@ def dict_list_to_json(dict_list, filename):
         print(f"Ошибка при преобразовании списка словарей в JSON или записи в файл: {e}")
         return None
 
-def json_to_dict_list(filename):
+def json_to_dict_list(filename: str):
     """
     Преобразует JSON-строку из файла в список словарей.
 

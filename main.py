@@ -4,24 +4,39 @@ from utils import json_to_dict_list, dict_list_to_json
 from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional
 
+# Определение путей к директориям и локальному файлу базы данных
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 STORAGE_FILE = os.path.join(DATA_DIR, "tasks.json")
 
 
 class TaskCreate(BaseModel):
+    """
+    Pydantic-модель для валидации данных при создании новой задачи.
+
+    :param owner_id: Идентификатор владельца задачи
+    :param task_name: Наименование задачи
+    """
     model_config = ConfigDict(extra="forbid")
     owner_id: int = Field(gt=0)
     task_name: str = Field(min_length=1, max_length=120)
 
 
 class TaskRead(BaseModel):
+    """
+    Pydantic-модель для валидации возвращаемых данных о задаче.
+
+    :param task_id: Уникальный идентификатор задачи
+    :param owner_id: Идентификатор владельца задачи
+    :param task_name: Наименование задачи
+    """
     model_config = ConfigDict(from_attributes=True)
     task_id: int = Field(gt=0)
     owner_id: int = Field(gt=0)
     task_name: str = Field(min_length=1, max_length=120)
 
 
+# Инициализация экземпляра приложения FastAPI
 app = FastAPI(
     title="Task management"
 )
@@ -29,6 +44,12 @@ app = FastAPI(
 
 @app.get("/tasks", response_model=List[TaskRead])
 def get_all_tasks(owner_id: Optional[int] = None):
+    """
+    Возвращает список всех сохранённых задач с возможностью фильтрации по владельцу.
+
+    :param owner_id: Необязательный идентификатор владельца для фильтрации
+    :return: Список объектов задач TaskRead
+    """
     tasks = json_to_dict_list(STORAGE_FILE)
     if tasks is None:
         tasks = []
@@ -44,6 +65,12 @@ def get_all_tasks(owner_id: Optional[int] = None):
 
 @app.get("/tasks/{task_id}", response_model=TaskRead)
 def get_task_by_id(task_id: int):
+    """
+    Осуществляет поиск и возврат конкретной задачи по её идентификатору.
+
+    :param task_id: Идентификатор искомой задачи
+    :return: Объект найденной задачи TaskRead
+    """
     tasks = json_to_dict_list(STORAGE_FILE)
     if tasks is None:
         tasks = []
@@ -58,6 +85,12 @@ def get_task_by_id(task_id: int):
 
 @app.post("/tasks", response_model=TaskRead)
 def post_task(data: TaskCreate):
+    """
+    Создаёт новую задачу, присваивает уникальный идентификатор и сохраняет её в файл.
+
+    :param data: Входные валидированные данные задачи (TaskCreate)
+    :return: Созданная задача с назначенным task_id
+    """
     tasks = json_to_dict_list(STORAGE_FILE)
     if tasks is None:
         tasks = []
@@ -77,6 +110,12 @@ def post_task(data: TaskCreate):
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):
+    """
+    Удаляет задачу из локального хранилища по её идентификатору.
+
+    :param task_id: Идентификатор задачи, которую требуется удалить
+    :return: None при успешном удалении
+    """
     tasks = json_to_dict_list(STORAGE_FILE)
     if tasks is None:
         tasks = []
