@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    container_name: fastapi_tasks_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    restart: always
