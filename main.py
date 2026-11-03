@@ -17,7 +17,6 @@ class TaskCreate(BaseModel):
     :param owner_id: Идентификатор владельца задачи
     :param task_name: Наименование задачи
     """
-    model_config = ConfigDict(extra="forbid")
     owner_id: int = Field(gt=0)
     task_name: str = Field(min_length=1, max_length=120)
 
@@ -30,7 +29,6 @@ class TaskRead(BaseModel):
     :param owner_id: Идентификатор владельца задачи
     :param task_name: Наименование задачи
     """
-    model_config = ConfigDict(from_attributes=True)
     task_id: int = Field(gt=0)
     owner_id: int = Field(gt=0)
     task_name: str = Field(min_length=1, max_length=120)
